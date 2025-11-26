@@ -9,3 +9,32 @@
     <p>Browse the latest blockbuster movies and showtimes.</p>
 
 </div>
+<!-- Movie Posters Row -->
+<div class="d-flex justify-content-center mt-4">
+    <img src="/images/movie1.jpg" class="movie-poster" />
+    <img src="/images/movie2.jpg" class="movie-poster mx-3" />
+    <img src="/images/movie3.jpg" class="movie-poster" />
+</div>
+
+<!-- Buttons -->
+<div class="text-center mt-5">
+    <a asp-page="/Movies/Index" class="btn btn-primary btn-lg mx-3">
+        EXPLORE MOVIES ONLINE
+    </a>
+
+    <a asp-page="/Bookings/Index" class="btn btn-outline-secondary btn-lg mx-3">
+        BOOKINGS
+    </a>
+</div>
+
+<!-- Styles for posters -->
+<style>
+    .movie-poster {
+        width: 200px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+</style>
+
