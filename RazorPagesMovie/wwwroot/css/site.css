@@ -1,31 +1,153 @@
-html {
-  font-size: 14px;
+/* ---------------------------------------------
+   GLOBAL COLORS & PAGE BACKGROUND
+------------------------------------------------*/
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* Light blue center with dark corners */
+    background: radial-gradient(circle, #b3d9ff 0%, #000000 100%);
+    color: #e0e0e0; /* soft gray text */
 }
 
-@media (min-width: 768px) {
-  html {
+/* ---------------------------------------------
+   MOVIE PAGE LAYOUT
+------------------------------------------------*/
+.movie-page {
+    padding: 20px 40px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #cce6ff; /* light blue title */
+}
+
+/* ---------------------------------------------
+   FILTER BAR
+------------------------------------------------*/
+.filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.filter-select,
+.filter-input {
+    padding: 10px 12px;
     font-size: 16px;
-  }
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    color: #cce6ff;
+    border: 1px solid #66aaff;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    .filter-input::placeholder {
+        color: #88bbff;
+    }
+
+.filter-btn {
+    padding: 10px 25px;
+    font-size: 16px;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+    .filter-btn:hover {
+        background: #0053d6;
+    }
+
+/* ---------------------------------------------
+   MOVIE GRID
+------------------------------------------------*/
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 25px;
 }
 
-body {
-  margin-bottom: 60px;
+/* ---------------------------------------------
+   MOVIE CARD (NO WHITE)
+------------------------------------------------*/
+.movie-card {
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #3377cc;
+    backdrop-filter: blur(10px);
+    transition: transform .2s, box-shadow .3s;
+    cursor: pointer;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    .movie-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.45);
+    }
+
+/* ---------------------------------------------
+   POSTER IMAGE
+------------------------------------------------*/
+.poster-wrapper {
+    position: relative;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.movie-poster {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+    border-radius: 10px;
 }
+
+/* Quality badge */
+.quality-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #003366;
+    color: #cce6ff;
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+
+/* ---------------------------------------------
+   MOVIE INFORMATION
+------------------------------------------------*/
+.movie-info {
+    padding: 12px;
+}
+
+.movie-title {
+    font-size: 18px;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+    color: #cce6ff;
+}
+
+.movie-meta {
+    font-size: 14px;
+    color: #99bfff;
+}
+
+/* ---------------------------------------------
+   DETAILS BUTTON
+------------------------------------------------*/
+.details-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 14px;
+    font-size: 14px;
+    border: 1px solid #66aaff;
+    color: #66aaff;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+    .details-btn:hover {
+        background: #66aaff;
+        color: black;
+    }
