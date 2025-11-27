@@ -1,5 +1,6 @@
 ﻿@page
-@model LoginModel
+@model RazorPagesMovie.Pages.LoginModel  
+
 @{
     ViewData["Title"] = "Login";
 }
@@ -20,9 +21,4 @@
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
 
-@if (Model.ErrorMessage != null)
-{
-    <div class="alert alert-danger mt-3">
-        @Model.ErrorMessage
-    </div>
-}
+
