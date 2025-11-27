@@ -48,5 +48,16 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    @if (Context.Session.GetString("Username") != null)
+    {
+        <!-- If the user is logged in, show the logout button -->
+        <a href="/Logout" class="btn btn-danger">Logout</a>
+    }
+    else
+    {
+        <!-- If the user is not logged in, show the login button -->
+        <a href="/Login" class="btn btn-primary">Login</a>
+    }
+
 </body>
 </html>
