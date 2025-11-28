@@ -1,0 +1,24 @@
+﻿@page 
+@model RazorPagesMovie.Pages.Movies.BookModel
+
+<h2>Book @Model.TimeSlot.Movie.Title</h2>
+
+<p><strong>Cinema:</strong> @Model.TimeSlot.Cinema.Name</p>
+<p><strong>Location:</strong> @Model.TimeSlot.Cinema.Location</p>
+<p><strong>Time:</strong> @Model.TimeSlot.StartTime.ToString("yyyy-MM-dd HH:mm")</p>
+
+@if (Model.TimeSlot.AvailableSeats > 0)
+{
+    <p><strong>Available Seats:</strong> @Model.TimeSlot.AvailableSeats</p>
+
+    <form method="post">
+        <label>Your Name</label>
+        <input name="UserName" class="form-control" required />
+
+        <button type="submit" class="btn btn-primary mt-2">Book</button>
+    </form>
+}
+else
+{
+    <h3 class="text-danger">Not Available</h3>
+}
