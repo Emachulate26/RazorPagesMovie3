@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,14 +12,16 @@ namespace RazorPagesMovie.Pages.Movies
 {
     public class IndexModel : PageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly RazorPagesMovieContext _context;
 
-        public IndexModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public IndexModel(RazorPagesMovieContext context)
         {
             _context = context;
         }
 
-        public IList<Movie> Movie { get;set; } = default!;
+        public IList<Movie> Movie { get; set; } = default!;
+        public IList<MovieTimeSlot> TimeSlots { get; set; } = default!; // <-- Add this
+
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
 
@@ -31,11 +32,9 @@ namespace RazorPagesMovie.Pages.Movies
 
         public async Task OnGetAsync()
         {
-            // <snippet_search_linqQuery>
             IQueryable<string> genreQuery = from m in _context.Movie
                                             orderby m.Genre
                                             select m.Genre;
-            // </snippet_search_linqQuery>
 
             var movies = from m in _context.Movie
                          select m;
@@ -50,10 +49,14 @@ namespace RazorPagesMovie.Pages.Movies
                 movies = movies.Where(x => x.Genre == MovieGenre);
             }
 
-            // <snippet_search_selectList>
             Genres = new SelectList(await genreQuery.Distinct().ToListAsync());
-            // </snippet_search_selectList>
             Movie = await movies.ToListAsync();
+
+            // Load all timeslots including related movie & cinema
+            TimeSlots = await _context.MovieTimeSlot
+                .Include(t => t.Movie)
+                .Include(t => t.Cinema)
+                .ToListAsync();
         }
     }
 }
