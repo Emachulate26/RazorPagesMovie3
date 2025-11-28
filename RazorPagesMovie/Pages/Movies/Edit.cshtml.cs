@@ -73,5 +73,8 @@ namespace RazorPagesMovie.Pages.Movies
         {
             return _context.Movie.Any(e => e.Id == id);
         }
+        [BindProperty]
+        public IFormFile? ImageFile { get; set; }
+
     }
 }
