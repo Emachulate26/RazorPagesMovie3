@@ -25,11 +25,14 @@
 </form>
 
 <!-- Movie Grid -->
-<div class="movie-grid mt-4">
+<div class="movie-grid">
     @foreach (var movie in Model.Movie)
     {
-        <div class="movie-card">
-           
+        
+            <!-- MOVIE INFORMATION -->
+            <div class="movie-info">
+                <h3 class="movie-title">@movie.Title</h3>
+                <p class="movie-meta">@movie.Genre • @movie.ReleaseDate.Year</p>
 
                 <a asp-page="./Details" asp-route-id="@movie.Id" class="details-btn">
                     Details
