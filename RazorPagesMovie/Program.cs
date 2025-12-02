@@ -3,11 +3,14 @@ using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<UserService>();
+
 
 // Add Razor Pages and DbContext
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RazorPagesMovieContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
+
 
 // Add session services
 builder.Services.AddDistributedMemoryCache(); // In-memory session storage
