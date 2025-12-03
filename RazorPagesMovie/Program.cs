@@ -34,6 +34,14 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.LoginPath = "/Login";     // or whatever your login page is
+    });
+
+
+
 
 app.UseHttpsRedirection();
 app.UseRouting();
