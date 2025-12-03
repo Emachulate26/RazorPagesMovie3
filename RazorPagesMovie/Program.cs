@@ -9,15 +9,23 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RazorPagesMovieContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
 
-
 // Add session services
-builder.Services.AddDistributedMemoryCache(); // In-memory session storage
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
-    options.Cookie.HttpOnly = true; // Make session cookie HttpOnly for security
-    options.Cookie.IsEssential = true; // Make the cookie essential for functionality
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
+
+// **Add authentication BEFORE building the app**
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.LoginPath = "/Login";
+    });
+
+builder.Services.AddAuthorization(); // Don't forget to add Authorization if needed
 
 var app = builder.Build();
 
@@ -25,7 +33,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    SeedData.Initialize(services); // You can implement the data seeding as needed
+    SeedData.Initialize(services);
 }
 
 // Configure middleware pipeline
@@ -34,22 +42,14 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
-builder.Services.AddAuthentication("MyCookieAuth")
-    .AddCookie("MyCookieAuth", options =>
-    {
-        options.LoginPath = "/Login";     // or whatever your login page is
-    });
-
-
-
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// Use session middleware to handle session data
-app.UseSession();
-
+app.UseAuthentication(); // Add this middleware
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapStaticAssets();
 app.MapRazorPages();

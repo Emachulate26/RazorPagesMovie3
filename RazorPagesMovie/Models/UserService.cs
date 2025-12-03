@@ -1,21 +1,20 @@
-﻿using System.Collections.Generic;
-using RazorPagesMovie.Models;
-using RazorPagesMovie.Services;
+﻿using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Services
 {
     public class UserService
     {
-        private static List<AppUser> users = new List<AppUser>();
+        private readonly List<AppUser> _users = new();
 
-        public List<AppUser> GetUsers()
-        {
-            return users;
-        }
+        public List<AppUser> GetUsers() => _users;
 
-        public void SaveUsers(List<AppUser> updatedUsers)
+        public void AddUser(string username, string password)
         {
-            users = updatedUsers;
+            _users.Add(new AppUser
+            {
+                Username = username,
+                Password = password
+            });
         }
     }
 }
