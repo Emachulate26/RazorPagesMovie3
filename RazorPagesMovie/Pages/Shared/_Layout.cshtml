@@ -19,21 +19,16 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <<ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Account/Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-                        </li>
                     </ul>
-                   
+
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
@@ -57,12 +52,9 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
     @if (Context.Session.GetString("Username") != null)
     {
-        <!-- If the user is logged in, show the logout button -->
-        <a href="/Logout" class="btn btn-danger">Logout</a>
     }
-    
-  
 </body>
 </html>

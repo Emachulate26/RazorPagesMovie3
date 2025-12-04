@@ -10,6 +10,8 @@ namespace RazorPagesMovie.Models
         // FK to Movie
         public int MovieId { get; set; }
         public Movie Movie { get; set; }
+        public DateTime ShowTime { get; set; }
+        public decimal Price { get; set; }
 
         // FK to Cinema
         public int CinemaId { get; set; }

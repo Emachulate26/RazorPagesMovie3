@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Data
 {
-    public class RazorPagesMovieContext : DbContext
+    public class RazorPagesMovieContext : IdentityDbContext
     {
         public RazorPagesMovieContext(DbContextOptions<RazorPagesMovieContext> options)
             : base(options)
@@ -15,8 +12,6 @@ namespace RazorPagesMovie.Data
         }
 
         public DbSet<Movie> Movie { get; set; } = default!;
-
-        // ADD THESE FOR BOOKINGS SYSTEM
         public DbSet<Cinema> Cinema { get; set; }
         public DbSet<MovieTimeSlot> MovieTimeSlot { get; set; }
         public DbSet<Booking> Booking { get; set; }
