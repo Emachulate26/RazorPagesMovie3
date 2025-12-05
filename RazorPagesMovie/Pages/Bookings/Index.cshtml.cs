@@ -19,12 +19,27 @@ namespace RazorPagesMovie.Pages.Bookings
             _context = context;
         }
 
-        public IList<Booking> Booking { get;set; } = default!;
+        public IList<Booking> Booking { get; set; } = default!;
+        public string? UserName { get; set; }
+
+        public string MovieTitle { get; set; }
+        public DateTime ShowTime { get; set; }
+
+        public DateTime BookingDate { get; set; }
+        public int NumberOfTickets { get; set; }
+        public decimal Price { get; set; }
+
 
         public async Task OnGetAsync()
         {
-            Booking = await _context.Booking
-                .Include(b => b.MovieTimeSlot).ToListAsync();
+            if (_context.Booking != null)
+            {
+                // CRITICAL FIX: Use ThenInclude to load the Movie associated with the MovieTimeSlot
+                Booking = await _context.Booking
+                    .Include(b => b.MovieTimeSlot)
+                        .ThenInclude(mts => mts.Movie) // <-- This loads the Movie details!
+                    .ToListAsync();
+            }
         }
     }
 }

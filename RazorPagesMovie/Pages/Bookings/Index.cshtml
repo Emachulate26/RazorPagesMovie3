@@ -2,41 +2,71 @@
 @model RazorPagesMovie.Pages.Bookings.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Bookings";
 }
 
-<h1>Index</h1>
+<h1>My Bookings</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-primary">Create New Booking</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].MovieTimeSlot)
+                Movie Title & Show Time
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Booking[0].UserName)
             </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].BookingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].NumberOfTickets)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Price)
+            </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Booking) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MovieTimeSlot.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Booking)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MovieTimeSlot.Movie.Title)
+                    <br />
+                    <span class="text-muted small">@Html.DisplayFor(modelItem => item.MovieTimeSlot.StartTime)</span>
+
+                    @* @Html.DisplayFor(modelItem => item.MovieTitle) *@
+                    @* <br /> *@
+                    @* <span class="text-muted small">@Html.DisplayFor(modelItem => item.ShowTime)</span> *@
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfTickets)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

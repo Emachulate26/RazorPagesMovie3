@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RazorPagesMovie.Data;
 
@@ -11,9 +12,11 @@ using RazorPagesMovie.Data;
 namespace RazorPagesMovie.Migrations
 {
     [DbContext(typeof(RazorPagesMovieContext))]
-    partial class RazorPagesMovieContextModelSnapshot : ModelSnapshot
+    [Migration("20251204110135_AddUserIdToBooking")]
+    partial class AddUserIdToBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,24 +235,8 @@ namespace RazorPagesMovie.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("BookingDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("MovieTimeSlotId")
                         .HasColumnType("int");
-
-                    b.Property<string>("MovieTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfTickets")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("ShowTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
