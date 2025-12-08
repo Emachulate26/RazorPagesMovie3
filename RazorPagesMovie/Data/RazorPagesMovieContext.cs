@@ -15,6 +15,6 @@ namespace RazorPagesMovie.Data
         }
 
         public DbSet<RazorPagesMovie.Models.Movie> Movie { get; set; } = default!;
-
+        public object Showtimes { get; internal set; }
     }
 }

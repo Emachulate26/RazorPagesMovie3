@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RazorPagesMovie.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace RazorPagesMovie.Models
 {
@@ -17,3 +18,4 @@ namespace RazorPagesMovie.Models
         public int SeatsBooked { get; set; }
     }
 }
+ 
