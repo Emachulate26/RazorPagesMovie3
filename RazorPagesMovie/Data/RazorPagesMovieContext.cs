@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Data
 {
     public class RazorPagesMovieContext : DbContext
     {
-        public RazorPagesMovieContext (DbContextOptions<RazorPagesMovieContext> options)
+        public RazorPagesMovieContext(DbContextOptions<RazorPagesMovieContext> options)
             : base(options)
         {
         }
 
-        public DbSet<RazorPagesMovie.Models.Movie> Movie { get; set; } = default!;
-        public object Showtimes { get; internal set; }
+        public DbSet<Movie> Movie { get; set; }
+        public DbSet<Showtime> Showtime { get; set; }
+
+        // ✅ ADD THIS LINE
+        public DbSet<Booking> Bookings { get; set; }
     }
 }

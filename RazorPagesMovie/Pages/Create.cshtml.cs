@@ -39,6 +39,7 @@ namespace RazorPagesMovie.Pages
             {
                 return Page();
             }
+           
 
             _context.Bookings.Add(Booking);
             await _context.SaveChangesAsync();
