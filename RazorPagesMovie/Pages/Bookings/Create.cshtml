@@ -15,8 +15,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group mb-4">
-                <label asp-for="Booking.MovieTimeSlotId" class="control-label">Movie & Show Time</label>
-                <select asp-for="Booking.MovieTimeSlotId" class="form-control" asp-items="@(ViewData["MovieTimeSlotId"] as SelectList)"></select>
+                <label asp-for="Booking.MovieTimeSlotId" class="control-label">Search Movie & Show Time</label>
+                <select asp-for="Booking.MovieTimeSlotId"
+                        class="form-control"
+                        id="MovieTimeSlotSearch"
+                        style="width: 100%;">
+                </select>
                 <span asp-validation-for="Booking.MovieTimeSlotId" class="text-danger"></span>
             </div>
 
@@ -26,13 +30,6 @@
                 <span asp-validation-for="Booking.NumberOfTickets" class="text-danger"></span>
             </div>
 
-            @* <div class="form-group mb-4">
-                <label asp-for="Booking.Price" class="control-label">Price</label>
-                <input asp-for="Booking.Price" class="form-control" />
-                <span asp-validation-for="Booking.Price" class="text-danger"></span>
-            </div> *@
-
-
             <div class="form-group mb-4">
                 <label class="control-label">Booked By (Logged-in User)</label>
                 <input value="@User.Identity.Name" class="form-control" readonly />
@@ -41,8 +38,6 @@
 
             <input type="hidden" asp-for="Booking.UserName" />
             <input type="hidden" asp-for="Booking.UserId" />
-
-            @* <input type="hidden" asp-for="Booking.BookingDate" /> *@ 
 
             <div class="form-group mt-4">
                 <input type="submit" value="Confirm Booking" class="btn btn-primary" />
@@ -59,4 +54,38 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+ 
+    // ... other scripts ...
+    <script>
+        $(document).ready(function () {
+            var searchUrl = "@Url.Page("Create", "SearchTimeSlots")";
+
+            $('#MovieTimeSlotSearch').select2({
+                placeholder: 'Search for a Movie Title (min 3 characters)...',
+                minimumInputLength: 3,
+                allowClear: true,
+                ajax: {
+                    url: searchUrl,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            term: params.term 
+                        };
+                    },
+                    // *** FIX IS HERE: SIMPLIFYING processResults ***
+                    processResults: function (data) {
+                        // The C# handler returns an array of objects
+                        // that already have 'id' and 'text' properties.
+                        // We only need to wrap that array in the 'results' property.
+                        return {
+                            results: data 
+                        };
+                    },
+                    // ... rest of the configuration ...
+                    cache: true
+                }
+            });
+        });
+    </script>
 }

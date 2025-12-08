@@ -10,10 +10,18 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RazorPagesMovieContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
 
-// **IDENTITY CONFIGURATION (CORRECT)**
-// This line registers all Identity services, including authentication and user management.
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RazorPagesMovieContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false; // Set to false
 
+    // Simplify passwords for testing
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 4;
+})
+.AddEntityFrameworkStores<RazorPagesMovieContext>();
 // **REMOVED CONFLICTING CUSTOM AUTHENTICATION SETUP**
 // (Removed: builder.Services.AddAuthentication("MyCookieAuth").AddCookie(...) )
 // (Removed: builder.Services.AddAuthorization() ) 
@@ -25,6 +33,14 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+});
+builder.Services.AddAuthorization(options =>
+{
+    // Define the 'AdminPolicy'
+    options.AddPolicy("AdminPolicy", policy =>
+        // This policy requires the logged-in user to have the Role claim set to "Admin"
+        policy.RequireRole("Admin")
+    );
 });
 
 

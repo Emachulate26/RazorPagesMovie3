@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using RazorPagesMovie.Models;
-// NOTE: Make sure the RazorPagesMovie.Data namespace is correct for your DbContext
 
 namespace RazorPagesMovie.Pages.Bookings
 {
@@ -28,61 +27,65 @@ namespace RazorPagesMovie.Pages.Bookings
         [BindProperty]
         public Booking Booking { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync()
+        // -----------------------------------------------------------
+        // 1. UPDATED: No more ViewData population on initial GET
+        // -----------------------------------------------------------
+        public IActionResult OnGet()
         {
-            // 1. Fetch available Movie Time Slots for the dropdown
-            // (Existing logic remains the same)
-            ViewData["MovieTimeSlotId"] = new SelectList(
-                await _context.MovieTimeSlot
-                    .Include(mts => mts.Movie)
-                    .Select(mts => new
-                    {
-                        Id = mts.Id,
-                        DisplayText = $"{mts.Movie.Title} - {mts.StartTime:yyyy-MM-dd HH:mm}"
-                    })
-                    .ToListAsync(),
-                "Id",
-                "DisplayText");
-
             return Page();
         }
 
+        // -----------------------------------------------------------
+        // 2. NEW HANDLER: AJAX Endpoint for Typeahead/Search
+        // -----------------------------------------------------------
+        public async Task<JsonResult> OnGetSearchTimeSlotsAsync(string term)
+        {
+            if (string.IsNullOrEmpty(term) || term.Length < 3)
+            {
+                // Require at least 3 characters to start searching
+                return new JsonResult(new List<object>());
+            }
+            string searchTerm = term.ToLower();
+
+            var timeSlots = await _context.MovieTimeSlot
+                .Include(mts => mts.Movie)
+                .Where(mts => mts.Movie.Title.ToLower().Contains(searchTerm))
+                .OrderBy(mts => mts.Movie.Title)
+                .ThenBy(mts => mts.StartTime)
+                .Take(20) // Limit the number of results
+                .Select(mts => new
+                {
+                    id = mts.Id,
+                    // Format the text to show both Movie Title and Show Time
+                    text = $"{mts.Movie.Title} - {mts.StartTime:yyyy-MM-dd HH:mm}"
+                })
+                .ToListAsync();
+
+            return new JsonResult(timeSlots);
+        }
+
+        // -----------------------------------------------------------
+        // 3. ONPOST: Logic to save the booking
+        // -----------------------------------------------------------
         public async Task<IActionResult> OnPostAsync()
         {
-            // 1. Check if the model state is valid (e.g., if a slot and ticket count were provided)
-            // We use TryValidateModel to ensure only the necessary fields are validated if the 
-            // model state includes fields we intend to set later (like Price).
+            // We use TryValidateModel to ensure only the necessary fields are validated 
+            // before we manually set BookingDate and Price.
             if (!ModelState.IsValid)
             {
-                // Re-populate ViewData if validation fails
-                // (Existing re-population logic remains the same)
-                ViewData["MovieTimeSlotId"] = new SelectList(
-                    await _context.MovieTimeSlot
-                        .Include(mts => mts.Movie)
-                        .Select(mts => new
-                        {
-                            Id = mts.Id,
-                            DisplayText = $"{mts.Movie.Title} - {mts.StartTime:yyyy-MM-dd HH:mm}"
-                        })
-                        .ToListAsync(),
-                    "Id",
-                    "DisplayText");
+                // If validation fails, return Page()
                 return Page();
             }
 
-            // --- ADDED LOGIC STARTS HERE ---
-
             // Step 2: Fetch the selected MovieTimeSlot to get the ticket price
             var timeSlot = await _context.MovieTimeSlot
-                // Assuming your MovieTimeSlot has a Price or links to a Movie which has a Price
                 .Include(mts => mts.Movie)
                 .FirstOrDefaultAsync(mts => mts.Id == Booking.MovieTimeSlotId);
 
             if (timeSlot == null)
             {
-                // Add a model error if the time slot is invalid
                 ModelState.AddModelError("Booking.MovieTimeSlotId", "The selected show time is not valid.");
-                return Page(); // Re-show the page with the error
+                return Page();
             }
 
             // Step 3: Automatically assign the required Booking properties:
@@ -92,7 +95,7 @@ namespace RazorPagesMovie.Pages.Bookings
             if (user != null)
             {
                 Booking.UserId = user.Id;
-                Booking.UserName = user.Email; // Use email as a simple display name
+                Booking.UserName = user.Email;
             }
 
             // B. Set the booking date to the current date/time
@@ -100,20 +103,11 @@ namespace RazorPagesMovie.Pages.Bookings
 
             // C. Calculate the total Price
             // ASSUMPTION: The unit price is stored on the Movie model (timeSlot.Movie.Price)
-            // You may need to adjust the property name based on your actual Movie/MovieTimeSlot model structure
-            // We'll use a placeholder variable if the price isn't readily available for calculation.
-            // Example: decimal unitPrice = timeSlot.Movie.TicketPrice; 
-
-            // Using a simple placeholder price for demonstration:
-            decimal unitPrice = timeSlot.Movie.Price > 0 ? timeSlot.Movie.Price : 12.50m; // Use movie price or default
-
+            decimal unitPrice = timeSlot.Movie.Price > 0 ? timeSlot.Movie.Price : 12.50m;
             Booking.Price = Booking.NumberOfTickets * unitPrice;
-
-            // --- ADDED LOGIC ENDS HERE ---
-
             // Step 4: Save the Booking
-            _context.Booking.Add(Booking);
-            await _context.SaveChangesAsync();
+            _context.Booking.Add(Booking); // Marks the new booking for insertion
+            await _context.SaveChangesAsync(); // Executes the insert command to the database!
 
             return RedirectToPage("./Index");
         }
