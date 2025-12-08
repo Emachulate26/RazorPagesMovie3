@@ -1,10 +1,12 @@
 ﻿@page
-@model UsersIndexModel
+// 🌟 FIX: Reference the full, correct class name
+@model RazorPagesMovie.Pages.Admin.Users.UsersIndexModel
 @{
     ViewData["Title"] = "User Management";
 }
 
 <h1>@ViewData["Title"]</h1>
+<hr />
 
 <table class="table table-striped table-hover">
     <thead>
@@ -16,16 +18,24 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model.Users)
+        @if (Model.Users != null)
+        {
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@(user.EmailConfirmed ? "Yes" : "No")</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@user.Id" class="btn btn-sm btn-warning">Edit Roles</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>@(user.EmailConfirmed ? "✅ Yes" : "❌ No")</td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@user.Id" class="btn btn-sm btn-info">Edit Roles</a>
-                    @* Optionally: Add a link to reset password or ban user *@
-                </td>
+                <td colspan="4" class="text-center text-muted">No users found.</td>
             </tr>
         }
     </tbody>
