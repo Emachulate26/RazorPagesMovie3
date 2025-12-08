@@ -5,20 +5,24 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Razor Pages and DbContext
+// --------------------------
+// Add services to the container
+// --------------------------
+
+// Razor Pages
 builder.Services.AddRazorPages();
+
+// DbContext
 builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RazorPagesMovieContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RazorPagesMovieContext")
+    ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
 
-// **IDENTITY CONFIGURATION (CORRECT)**
-// This line registers all Identity services, including authentication and user management.
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RazorPagesMovieContext>();
+// Identity Configuration
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()              // <-- Enable roles
+    .AddEntityFrameworkStores<RazorPagesMovieContext>();
 
-// **REMOVED CONFLICTING CUSTOM AUTHENTICATION SETUP**
-// (Removed: builder.Services.AddAuthentication("MyCookieAuth").AddCookie(...) )
-// (Removed: builder.Services.AddAuthorization() ) 
-
-// Add session services (OK to keep for non-auth data)
+// Session (optional)
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -27,17 +31,23 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
 var app = builder.Build();
 
-// Seed initial data
+// --------------------------
+// Seed Admin and Roles
+// --------------------------
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    SeedData.Initialize(services);
+
+    // Call SeedData to create roles and default users
+    RazorPagesMovie.Data.SeedData.Initialize(services);
+
 }
 
+// --------------------------
 // Configure middleware pipeline
+// --------------------------
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -47,8 +57,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// **CRITICAL: Authentication and Authorization MUST be here**
-app.UseAuthentication();
+app.UseAuthentication();   // <-- Must be before UseAuthorization
 app.UseAuthorization();
 
 app.UseSession();

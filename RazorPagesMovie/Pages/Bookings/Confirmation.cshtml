@@ -1,0 +1,14 @@
+﻿@page "{id:int}"
+@model RazorPagesMovie.Pages.Bookings.ConfirmationModel
+@{
+    ViewData["Title"] = "Booking Confirmation";
+}
+
+<h2>Booking Confirmed!</h2>
+
+<p><strong>Movie:</strong> @Model.Booking.MovieTitle</p>
+<p><strong>Showtime:</strong> @Model.Booking.ShowTime:yyyy-MM-dd HH:mm</p>
+<p><strong>Tickets:</strong> @Model.Booking.NumberOfTickets</p>
+<p><strong>Total Price:</strong> @Model.Booking.Price.ToString("C")</p>
+
+<a asp-page="/Movies/Index" class="btn btn-success mt-3">Back to Movies</a>

@@ -31,17 +31,21 @@
         <div class="movie-card">
 
             <!-- MOVIE POSTER -->
-            <img src="@movie.ImageUrl"
-                 alt="@movie.Title"
-                 class="movie-poster" />
+            <img src="~/@movie.ImageUrl" alt="@movie.Title" class="movie-poster" />
 
             <!-- MOVIE INFORMATION -->
             <div class="movie-info">
                 <h3 class="movie-title">@movie.Title</h3>
                 <p class="movie-meta">@movie.Genre • @movie.ReleaseDate.Year</p>
 
+                <!-- Details Button -->
                 <a asp-page="./Details" asp-route-id="@movie.Id" class="details-btn">
                     Details
+                </a>
+
+                <!-- Book Button -->
+                <a asp-page="/Bookings/Create" asp-route-movieId="@movie.Id" class="btn btn-success ms-2">
+                    Book
                 </a>
             </div>
 
@@ -97,5 +101,20 @@
         .details-btn:hover {
             background: #007bff;
             color: white;
+        }
+
+    .btn-success {
+        padding: 8px 16px;
+        border-radius: 5px;
+        border: 1px solid #28a745;
+        color: white;
+        background-color: #28a745;
+        text-decoration: none;
+        transition: 0.3s;
+        margin-left: 5px;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
         }
 </style>

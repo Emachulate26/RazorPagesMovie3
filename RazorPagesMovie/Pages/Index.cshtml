@@ -1,43 +1,207 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to NUMETRO MOVIES</h1>
-    <p>Browse the latest blockbuster movies and showtimes.</p>
-</div>
+<!-- Moving Background -->
+<div class="bg-movies"></div>
 
-<!-- Movie Posters Row -->
-<div class="d-flex justify-content-center mt-4">
-    <img src="/images/Elio.jpg" class="movie-poster" />
-    <img src="/images/avatar-4.jpg" class="movie-poster mx-3" />
-    <img src="/images/Goat.jpg" class="movie-poster" />
-</div>
-
-<!-- Buttons -->
 <div class="text-center mt-5">
-    <a asp-page="/Movies/Index" class="btn btn-primary btn-lg mx-3">
+    <h1 class="display-3 text-warning animate__animated animate__fadeInDown">🍿 Welcome to NUMETRO MOVIES 🍿</h1>
+    <p class="lead animate__animated animate__fadeInUp">Catch the latest blockbusters before anyone else!</p>
+</div>
+
+<!-- Movie Carousel (Draggable) -->
+<div class="carousel-container mt-4" id="carousel">
+    <div class="carousel-track" id="carousel-track">
+        <img src="/images/Elio.jpg" class="movie-poster confetti-hover" />
+        <img src="/images/avatar-4.jpg" class="movie-poster confetti-hover" />
+        <img src="/images/Goat.jpg" class="movie-poster confetti-hover" />
+        <img src="/images/Elio.jpg" class="movie-poster confetti-hover" />
+        <img src="/images/avatar-4.jpg" class="movie-poster confetti-hover" />
+    </div>
+</div>
+
+<!-- Explore Button -->
+<div class="text-center mt-5">
+    <a class="btn btn-warning btn-lg animate__animated animate__pulse animate__infinite"
+       href="@((SignInManager.IsSignedIn(User)) ? Url.Page("/Movies/Index") : Url.Page("/Account/Login"))">
         EXPLORE MOVIES ONLINE
     </a>
-
-    <!-- Change the class from btn-outline-secondary to btn-primary for blue color -->
-    <a asp-page="/Bookings/Index" class="btn btn-primary btn-lg mx-3">
-        BOOKINGS
-    </a>
 </div>
 
-
-
-
-<!-- Styles for posters -->
+<!-- Styles -->
 <style>
+    body {
+        position: relative;
+        overflow-x: hidden;
+        background: #111;
+        color: #fff;
+    }
+
+    .bg-movies {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/cinema-bg.jpg') repeat-x;
+        background-size: cover;
+        z-index: -1;
+        animation: moveBackground 60s linear infinite;
+        opacity: 0.5;
+    }
+
+    @@keyframes moveBackground {
+        0%
+
+    {
+        background-position-x: 0;
+    }
+
+    100% {
+        background-position-x: -2000px;
+    }
+
+    }
+
+    .carousel-container {
+        overflow: hidden;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        cursor: grab;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.3s ease;
+        user-select: none;
+    }
+
     .movie-poster {
-        width: 200px;
-        height: 300px;
+        width: 180px;
+        height: 270px;
         object-fit: cover;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        border-radius: 12px;
+        margin: 0 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .movie-poster:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 10px 30px rgba(255, 255, 0, 0.6);
+        }
+
+    .btn-warning {
+        background-color: #ff9800;
+        border-color: #ff9800;
+        font-weight: bold;
+    }
+
+        .btn-warning:hover {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+    /* Confetti hover */
+    .confetti-hover:hover {
+        animation: confetti 1s ease-in-out forwards;
+    }
+
+    @@keyframes confetti {
+        0%
+
+    {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-10px) rotate(10deg);
+    }
+
+    50% {
+        transform: translateY(10px) rotate(-10deg);
+    }
+
+    75% {
+        transform: translateY(-5px) rotate(5deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    }
+
+    /* Falling confetti */
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: #ff0;
+        top: -10px;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0.8;
+        border-radius: 50%;
+        animation-name: fall;
+        animation-timing-function: linear;
+    }
+
+    @@keyframes fall {
+        0%
+
+    {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+    }
+
     }
 </style>
+
+<!-- Animate.css CDN for animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<!-- Scripts -->
+<script>
+    // Drag-scroll carousel
+    const carousel = document.getElementById('carousel');
+    const track = document.getElementById('carousel-track');
+    let isDragging = false;
+    let startX, scrollLeft;
+
+    carousel.addEventListener('mousedown', e => {
+        isDragging = true;
+        carousel.classList.add('active');
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+    });
+    carousel.addEventListener('mouseleave', () => isDragging = false);
+    carousel.addEventListener('mouseup', () => isDragging = false);
+    carousel.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 2; // scroll-fast
+        carousel.scrollLeft = scrollLeft - walk;
+    });
+
+    // Falling confetti
+    function createConfetti() {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+    }
+    setInterval(createConfetti, 300); // new confetti every 0.3s
+</script>

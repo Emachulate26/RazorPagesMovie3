@@ -16,11 +16,13 @@ namespace RazorPagesMovie.Models
         // FK to Cinema
         public int CinemaId { get; set; }
         public Cinema Cinema { get; set; }
-
+        
         [Display(Name = "Start Time")]
         public DateTime StartTime { get; set; }
 
         [Range(0, 300)]
         public int AvailableSeats { get; set; }
+        public string DisplayName => $"{Movie.Title} at {Cinema.Name} ({ShowTime:yyyy-MM-dd HH:mm}) - R{Price}";
+
     }
 }

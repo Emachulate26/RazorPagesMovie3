@@ -1,62 +1,23 @@
-﻿@page
+﻿@page "{movieId:int}"
 @model RazorPagesMovie.Pages.Bookings.CreateModel
-
 @{
-    ViewData["Title"] = "Create Booking";
+    ViewData["Title"] = "Book a Movie";
 }
 
-<h1>Create Booking</h1>
+<h2>Book: @Model.Movie?.Title</h2>
 
-<h4>Booking Details</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group mb-4">
-                <label asp-for="Booking.MovieTimeSlotId" class="control-label">Movie & Show Time</label>
-                <select asp-for="Booking.MovieTimeSlotId" class="form-control" asp-items="@(ViewData["MovieTimeSlotId"] as SelectList)"></select>
-                <span asp-validation-for="Booking.MovieTimeSlotId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-4">
-                <label asp-for="Booking.NumberOfTickets" class="control-label">Number of Tickets</label>
-                <input asp-for="Booking.NumberOfTickets" class="form-control" />
-                <span asp-validation-for="Booking.NumberOfTickets" class="text-danger"></span>
-            </div>
-
-            @* <div class="form-group mb-4">
-                <label asp-for="Booking.Price" class="control-label">Price</label>
-                <input asp-for="Booking.Price" class="form-control" />
-                <span asp-validation-for="Booking.Price" class="text-danger"></span>
-            </div> *@
-
-
-            <div class="form-group mb-4">
-                <label class="control-label">Booked By (Logged-in User)</label>
-                <input value="@User.Identity.Name" class="form-control" readonly />
-                <p class="text-muted small mt-1">Your account identity is captured automatically.</p>
-            </div>
-
-            <input type="hidden" asp-for="Booking.UserName" />
-            <input type="hidden" asp-for="Booking.UserId" />
-
-            @* <input type="hidden" asp-for="Booking.BookingDate" /> *@ 
-
-            <div class="form-group mt-4">
-                <input type="submit" value="Confirm Booking" class="btn btn-primary" />
-            </div>
-        </form>
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Booking.MovieTimeSlotId" class="form-label">Select Showtime & Cinema</label>
+        <select asp-for="Booking.MovieTimeSlotId" asp-items="Model.MovieTimeSlots" class="form-select">
+            <option value="">-- Select Slot --</option>
+        </select>
     </div>
-</div>
 
-<div class="mt-3">
-    <a asp-page="Index">Back to Bookings List</a>
-</div>
+    <div class="mb-3">
+        <label asp-for="Booking.NumberOfTickets" class="form-label">Number of Tickets</label>
+        <input asp-for="Booking.NumberOfTickets" type="number" min="1" class="form-control" />
+    </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+    <button type="submit" class="btn btn-primary">Book Now</button>
+</form>

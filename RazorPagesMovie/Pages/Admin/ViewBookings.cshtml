@@ -1,0 +1,38 @@
+﻿@page
+@model RazorPagesMovie.Pages.Admin.ViewBookingsModel
+@{
+    ViewData["Title"] = "View Bookings";
+}
+
+<h1>All Bookings</h1>
+
+@if (!Model.Bookings.Any())
+{
+    <p>No bookings yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Movie</th>
+                <th>Cinema</th>
+                <th>Time Slot</th>
+                <th>Seats Booked</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr>
+                    <td>@booking.UserName</td>
+                    <td>@booking.MovieTimeSlot.Movie.Title</td>
+                    <td>@booking.MovieTimeSlot.Cinema.Name</td>
+                    <td>@booking.MovieTimeSlot..ToString("g")</td>
+                    <td>@booking.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

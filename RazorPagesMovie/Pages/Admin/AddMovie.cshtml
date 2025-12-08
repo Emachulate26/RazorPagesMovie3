@@ -1,0 +1,44 @@
+﻿@page
+@model RazorPagesMovie.Pages.Admin.AddMovieModel
+@using RazorPagesMovie.Models
+@{
+    ViewData["Title"] = "Add Movie";
+}
+
+<div class="d-flex">
+    <!-- Admin Navigation Sidebar -->
+    <partial name="_AdminMenu" />
+
+    <!-- Main Content Area -->
+    <div class="admin-content p-4" style="margin-left: 240px; width: 100%;">
+        <h1>Add a New Movie</h1>
+
+        <form method="post">
+            <div class="form-group mb-3">
+                <label asp-for="Movie.Title"></label>
+                <input asp-for="Movie.Title" class="form-control" />
+                <span asp-validation-for="Movie.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Movie.Genre"></label>
+                <input asp-for="Movie.Genre" class="form-control" />
+                <span asp-validation-for="Movie.Genre" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Movie.ReleaseDate"></label>
+                <input asp-for="Movie.ReleaseDate" class="form-control" type="date" />
+                <span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Movie.ImageUrl"></label>
+                <input asp-for="Movie.ImageUrl" class="form-control" />
+                <span asp-validation-for="Movie.ImageUrl" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Movie</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
