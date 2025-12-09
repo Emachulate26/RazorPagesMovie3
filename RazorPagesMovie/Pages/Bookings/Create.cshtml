@@ -1,0 +1,42 @@
+﻿@page
+@model CreateModel
+
+<h2>Create New Booking</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Booking.MovieTimeSlotId" class="control-label">Select Movie & Time</label>
+                <select asp-for="Booking.MovieTimeSlotId" class="form-control"
+                        asp-items="Model.ShowTimeOptions">
+                    <option value="">-- Choose a Showing --</option>
+                </select>
+                <span asp-validation-for="Booking.MovieTimeSlotId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <label asp-for="Booking.NumberOfTickets" class="control-label">Number of Tickets</label>
+                <input asp-for="Booking.NumberOfTickets" class="form-control" type="number" min="1" max="10" />
+                <span asp-validation-for="Booking.NumberOfTickets" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Confirm Booking" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-page="MyBookings">Back to My Bookings</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
