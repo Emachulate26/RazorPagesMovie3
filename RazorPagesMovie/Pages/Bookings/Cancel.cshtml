@@ -1,0 +1,41 @@
+﻿@@page
+@model CancelModel
+
+<h2 class="text-danger">Cancel Booking</h2>
+<h3 class="text-warning">Are you sure you want to cancel this booking?</h3>
+<p class="text-danger">This action cannot be undone, and your seats will be released.</p>
+
+<div>
+    <h4>Booking Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            Movie Title:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.MovieTimeSlot.Movie.Title)
+        </dd>
+
+        <dt class="col-sm-3">
+            Show Time:
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Booking.MovieTimeSlot.Time.ToString("dddd, dd MMM @ hh:mm tt")
+        </dd>
+
+        <dt class="col-sm-3">
+            Tickets to be cancelled:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.NumberOfTickets)
+        </dd>
+
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Booking.Id" />
+
+        <input type="submit" value="Confirm Cancellation" class="btn btn-danger" /> |
+        <a asp-page="./MyBookings">Back to List</a>
+    </form>
+</div>
