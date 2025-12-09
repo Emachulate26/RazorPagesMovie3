@@ -1,0 +1,77 @@
+﻿@@page
+@model DetailsModel
+
+<h2>Booking Details</h2>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">
+            Booking ID:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.Id)
+        </dd>
+
+        <dt class="col-sm-3">
+            Tickets Reserved:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.NumberOfTickets)
+        </dd>
+
+        <dt class="col-sm-3">
+            Total Price:
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Booking.TotalPrice.ToString("C")
+        </dd>
+
+        <dt class="col-sm-3">
+            Booking Date/Time:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.BookingDate)
+        </dd>
+
+        <dt class="col-sm-3 text-primary mt-3">
+            Movie Title:
+        </dt>
+        <dd class="col-sm-9 text-primary mt-3">
+            @Html.DisplayFor(model => model.Booking.MovieTimeSlot.Movie.Title)
+        </dd>
+
+        <dt class="col-sm-3">
+            Show Time:
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Booking.MovieTimeSlot.Time.ToString("dddd, dd MMM @ hh:mm tt")
+        </dd>
+
+        <dt class="col-sm-3">
+            Cinema Location:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.MovieTimeSlot.Cinema.Name)
+        </dd>
+
+        <dt class="col-sm-3">
+            Screen Number:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.MovieTimeSlot.ScreenNumber)
+        </dd>
+
+        <dt class="col-sm-3">
+            Movie Description:
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Booking.MovieTimeSlot.Movie.Description)
+        </dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-page="./MyBookings" class="btn btn-secondary">Back to My Bookings</a>
+    <a asp-page="./Cancel" asp-route-id="@Model.Booking.Id" class="btn btn-danger">Cancel Booking</a>
+</div>

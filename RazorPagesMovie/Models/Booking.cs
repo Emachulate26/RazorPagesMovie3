@@ -24,7 +24,7 @@ namespace RazorPagesMovie.Models
 
         public DateTime BookingDate { get; set; }
         public int NumberOfTickets { get; set; }
-        public decimal Price { get; set; }
+        public decimal TotalPrice { get; set; }
 
         
     }

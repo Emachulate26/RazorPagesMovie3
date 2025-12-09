@@ -1,4 +1,53 @@
 ﻿@page
-@model RazorPagesMovie.Pages.Bookings.MyBookingsModel
-@{
-}
+@model MyBookingsModel
+
+<h2>My Bookings</h2>
+<hr />
+
+<p>
+    <a asp-page="./Create" class="btn btn-primary">Create New Booking</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Movie Title</th>
+            <th>Show Time</th>
+            <th>Tickets</th>
+            <th>Total Price</th>
+            <th>Booking Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    @* ... (table setup) ... *@
+    <tbody>
+        @if (Model.Bookings != null && Model.Bookings.Any())
+        {
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => booking.MovieTimeSlot.Movie.Title)
+                    </td>
+                    <td>
+                        @booking.MovieTimeSlot.Time.ToString("dd MMM @ hh:mm tt")
+                    </td>
+                    @* ... (rest of the table data) ... *@
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@booking.Id">Details</a> |
+                        <a asp-page="./Cancel" asp-route-id="@booking.Id" class="text-danger">Cancel</a> |
+                        <a asp-page="./Postpone" asp-route-id="@booking.Id">Postpone</a>
+                    </td>
+                </tr>
+            }
+        }
+        @* ... (end table) ... *@
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">You currently have no active bookings.</td>
+            </tr>
+        }
+    </tbody>
+</table>

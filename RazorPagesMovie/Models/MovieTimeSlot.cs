@@ -11,7 +11,11 @@ namespace RazorPagesMovie.Models
         public int MovieId { get; set; }
         public Movie Movie { get; set; }
         public DateTime ShowTime { get; set; }
-        public decimal Price { get; set; }
+        public decimal TotalPrice { get; set; }
+        public DateTime Time {  get; set; }
+
+        //Fk ScreenNumber is defined
+        public int ScreenNumber { get; set; }
 
         // FK to Cinema
         public int CinemaId { get; set; }

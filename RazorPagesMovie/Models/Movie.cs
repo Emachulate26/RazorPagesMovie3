@@ -27,5 +27,10 @@ namespace RazorPagesMovie.Models  // Ensure the class is in the correct namespac
         // Add this new property for the image URL or file name
         [Display(Name = "Image URL")]
         public string? ImageUrl { get; set; } // nullable string
+
+        // Ensure Description is defined 
+        [ StringLength(500)]
+        public string Description { get; set; }
+
     }
 }
