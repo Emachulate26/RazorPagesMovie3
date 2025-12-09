@@ -1,0 +1,45 @@
+﻿@page
+@model PostponeModel
+
+<h2>Postpone / Reschedule Booking</h2>
+<h4 class="text-warning">You are moving tickets for: @Model.Booking.MovieTimeSlot.Movie.Title</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Current Booking Details</h3>
+        <dl class="row">
+            <dt class="col-sm-4">Current Time:</dt>
+            <dd class="col-sm-8">@Model.Booking.MovieTimeSlot.Time.ToString("dd MMM @ hh:mm tt")</dd>
+
+            <dt class="col-sm-4">Tickets:</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Booking.NumberOfTickets)</dd>
+        </dl>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Select New Showtime</h3>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Booking.Id" />
+
+            <div class="form-group">
+                <label for="NewMovieTimeSlotId" class="control-label">Available Times:</label>
+                <select asp-for="NewMovieTimeSlotId" class="form-control"
+                        asp-items="Model.AvailableShowTimes">
+                    <option value="">-- Select a new time --</option>
+                </select>
+                <span asp-validation-for="NewMovieTimeSlotId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Reschedule Booking" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-page="./MyBookings">Back to My Bookings</a>
+</div>

@@ -30,7 +30,7 @@
                         <strong>Tickets:</strong> @Model.Booking.NumberOfTickets
                     </li>
                     <li class="list-group-item font-weight-bold">
-                        <strong>Total Paid:</strong> <span class="text-success h5">@((Model.Booking.NumberOfTickets * Model.Booking.Price).ToString("C"))</span>
+                        <strong>Total Paid:</strong> <span class="text-success h5">@((Model.Booking.NumberOfTickets * Model.Booking.TotalPrice).ToString("C"))</span>
                     </li>
                 </ul>
 

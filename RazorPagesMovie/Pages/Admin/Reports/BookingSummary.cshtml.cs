@@ -57,7 +57,7 @@ namespace RazorPagesMovie.Pages.Admin.Reports
                     MovieTitle = g.Key,
                     TotalBookings = g.Sum(b => b.NumberOfTickets),
                     // 🌟 FIX: Calculate revenue by multiplying Price * NumberOfTickets
-                    TotalRevenue = g.Sum(b => b.NumberOfTickets * b.Price)
+                    TotalRevenue = g.Sum(b => b.NumberOfTickets * b.TotalPrice)
                 })
                 .OrderByDescending(r => r.TotalRevenue)
                 .ToListAsync();
