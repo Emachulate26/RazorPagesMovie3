@@ -36,7 +36,7 @@ public class CreateModel : PageModel
         var availableShowTimes = await _context.MovieTimeSlot
             .Include(mts => mts.Movie)
             .Include(mts => mts.Cinema)
-            .Where(mts => mts.Time > DateTime.Now)
+            
             .OrderBy(mts => mts.Time)
             .ToListAsync();
 
